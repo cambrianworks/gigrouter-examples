@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-app
+  template:
+    metadata:
+      labels:
+        app: python-app
+    spec:
+      containers:
+      - name: python-app
+        image: python:3.11-slim  # Use a pre-built Python image
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          pip install --no-cache-dir -r /app/requirements.txt &&
+          python /app/app.py
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: app-volume
+          mountPath: /app
+      volumes:
+      - name: app-volume
+        configMap:
+          name: python-app-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-app
+spec:
+  selector:
+    app: python-app
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: LoadBalancer
+

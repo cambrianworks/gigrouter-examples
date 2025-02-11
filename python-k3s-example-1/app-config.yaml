@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: python-app-config
+data:
+  app.py: |
+    from flask import Flask, request, jsonify
+
+    app = Flask(__name__)
+
+    @app.route("/")
+    def home():
+        return "Hello, k3s World!"
+
+    @app.route("/add", methods=["GET"])
+    def add():
+        try:
+            operand1 = float(request.args.get("a", 0))
+            operand2 = float(request.args.get("b", 0))
+            result = operand1 + operand2
+            return jsonify({"operand1": operand1, "operand2": operand2, "result": result})
+        except ValueError:
+            return jsonify({"error": "Invalid input. Please provide numbers for arguments a and b."}), 400
+
+    if __name__ == "__main__":
+        app.run(host="0.0.0.0", port=8080)
+  requirements.txt: |
+    flask
+
