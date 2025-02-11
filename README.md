@@ -14,9 +14,6 @@ The suggested workflow is to:
 * Read the k3s overview
 * Follow the Python k3s example 1 which builds an http server that supports simple addition
   * This example includes an exercise to add a `multiply` function
-* Follow the Python k3s example 2 which demonstrates http file transfer, persistent volumes, k3s service-to-service communication, customizing images for k3s, use of an sqlite database and use of persistent volumes for file storage.
-  * This example includes an exercise that drills down on use of persistent volumes in k3s to help ensure that data meant to outlive ephemeral k3s resources can be saved to the host filesystem
-  * This example also illustrates how the md5sum service can be scaled to multiple instances
 
 ## License
 

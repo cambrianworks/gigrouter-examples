@@ -370,8 +370,6 @@ If we use `NodePort` then we can't listen at some common ports such as `8080` bu
 
 `ClusterIP` is the default service type (if type is not specified) then we can communicate within the cluster but not from a machine outside the cluster without additional ingress configuration.
 
-[Example 2](./python-k3s-example-2/README.md) gives a basic setup that uses an ingress which lets you attach your http service to the k3s cluster and available at both standard http:// and https:// ports and some unique URL path to direct to your service. 
-
 ## Service Types Additional Drilldown
 
 Launching and connecting to k3s TCP/IP services is important functionality to understand.
@@ -419,7 +417,7 @@ Below are some other options here for accessing the service or exposing ports:
 
 With above, you can connect to many variations including `localhost:30080`, `local_ip_address:30080`, or `cluster_ip_address:8080`, or port forward to node and connect to `8080`.
 
-3. Another option is to use the default `type: ClusterIP` which is generally reserved for intra-cluster communication or in combination with ingress configuration in the case of http endpoints. Use of ClusterIP and ingress setup is covered in [Example 2](./python-k3s-example-2/README.md).
+3. Another option is to use the default `type: ClusterIP` which is generally reserved for intra-cluster communication or in combination with ingress configuration in the case of http endpoints.
 
 ## K3s Built-in Services
 
@@ -458,4 +456,4 @@ This is an aggregator of resource usage.
 
 #### `traefik`
 
-Detailed more in example 2, `traefik` allows managing an ingress for http endpoints running within your k3s environment. You'll find that your k3s will by default listen on port 80 for http and at 443 for https though, without additional configuration, will run with a self-signed certificate and trigger some warnings.
+The `traefik` service allows managing an ingress for http endpoints running within your k3s environment. You'll find that your k3s will by default listen on port 80 for http and at 443 for https though, without additional configuration, will run with a self-signed certificate and trigger some warnings.
