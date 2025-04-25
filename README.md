@@ -3,6 +3,7 @@
 The gigrouter-examples repository contains:
 
 * Examples of (mostly k3s) user applications
+* [Instructions for installing CUDA 12](./cuda-12)
 * Functional tools
 * System software for the GigRouter
 
