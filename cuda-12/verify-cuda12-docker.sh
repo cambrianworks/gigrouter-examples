@@ -31,4 +31,6 @@ sudo docker run --rm --runtime=nvidia --gpus all -v ./bin/aarch64/linux/release:
 
 sudo docker run --rm --runtime=nvidia --gpus all -v ./bin/aarch64/linux/release:/test nvidia/cuda:12.2.0-base-ubuntu20.04 bash -c "cd /test && ./transpose"
 
-cd ~
+echo ""
+echo "Verified CUDA examples successfully ran under docker container!!"
+echo "You may choose to explore other examples or remove CUDA examples directory: ~/cuda-samples"
