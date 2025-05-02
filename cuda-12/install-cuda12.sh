@@ -9,6 +9,18 @@ if [ "$EUID" -ne 0 ]; then
     echo "Please run as root"
     exit 1
 fi
+# Verify we're on Ubuntu 20.04
+if [[ -r /etc/os-release ]]; then
+  # load NAME, VERSION_ID, PRETTY_NAME, etc.
+  . /etc/os-release
+  if [[ "$NAME" != "Ubuntu" || "$VERSION_ID" != "20.04" ]]; then
+    echo "Error: This script only runs on L4T R35.5.0 (Ubuntu 20.04). Detected: $PRETTY_NAME" >&2
+    exit 1
+  fi
+else
+  echo "Error: Unable to determine OS version (missing /etc/os-release)" >&2
+  exit 1
+fi
 
 # Add cuda apt source and install cuda 12
 
