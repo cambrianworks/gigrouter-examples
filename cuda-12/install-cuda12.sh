@@ -15,7 +15,7 @@ fi
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/arm64/cuda-keyring_1.1-1_all.deb -O /tmp/cuda-keyring.deb
 dpkg -i /tmp/cuda-keyring.deb
 apt-get update
-apt install -y cuda
+apt install -y cuda=12.2.2-1
 
 # Add cuda-12 compat to ldcache
 echo "/usr/local/cuda-12.2/compat" | tee /etc/ld.so.conf.d/988_cuda-12-compat.conf
