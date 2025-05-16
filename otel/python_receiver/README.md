@@ -26,7 +26,9 @@ It:
 - **Python 3.8+**  
 - **protoc** v3.15.0+ (for generating the `.proto` → `_pb2.py` files)  
 - A clone of the [OpenTelemetry proto definitions](https://github.com/open-telemetry/opentelemetry-proto)  
+- **websocat** (optional) for reading the JSON output to websocket
 
+Note: Protocol Buffers (or protobufs) use a strictly defined binary format for representing data and are defined in `*.proto` files whereas JSON is simply a human readable string representation that can be more appropriate to certain use cases.
 ### Setup
 
 - `pip` dependencies: fastapi, uvicorn[standard], protobuf, googleapis-common-protos, opentelemetry-proto
