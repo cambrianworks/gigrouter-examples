@@ -1,0 +1,70 @@
+
+# otlpReceiverServer.py
+
+A simple Python service that relays OpenTelemetry (OTLP) metrics from HTTP/Protobuf into WebSocket text frames (JSON).
+
+It:
+
+- **Receives** OTLP metrics over HTTP/Protobuf at **`POST /v1/metrics`**  
+- **Parses** the Protobuf `ExportMetricsServiceRequest` into JSON  
+- **Broadcasts** the JSON payload to connected WebSocket clients at **`/ws/metrics`**  
+- Supports **gzip**‐compressed payloads  
+
+---
+
+## Features
+
+- HTTP ingestion: `POST /v1/metrics`  
+- WebSocket broadcast: `ws://<host>:<port>/ws/metrics`  
+- Transparent GZIP decompression  
+- Pure Python/FastAPI  
+
+---
+
+## Prerequisites
+
+- **Python 3.8+**  
+- **protoc** v3.15.0+ (for generating the `.proto` → `_pb2.py` files)  
+- A clone of the [OpenTelemetry proto definitions](https://github.com/open-telemetry/opentelemetry-proto)  
+
+### Setup
+
+- `pip` dependencies: fastapi, uvicorn[standard], protobuf, googleapis-common-protos, opentelemetry-proto
+
+install with
+```
+/usr/bin/python -m venv env;
+source env/bin/activate;
+pip install -r requirements.txt
+```
+
+## Run
+
+Note: it is currently hardcoded to be an OTLP Receiver at port 4444, and will rebroadcast the data in JSON format (not protobuf)
+
+First you must configure your OTEL-collector to export to this port
+
+* first add a new Exporter to your otel-collector.yaml:
+```bash
+exporters:
+    otlphttp:
+    endpoint: http://<your address here>:4444    
+```
+* then in the same otel-collector.yaml be sure to add your new exporter to the metrics pipeline exports:
+```bash
+pipelines:
+    metrics:
+    receivers: [otlp, hostmetrics]
+    exporters: [..., otlphttp]
+```
+* restart your collector
+
+Now Run your python receiver
+```
+python otlpReceiverServer.py
+```
+
+- **Connect external websocket client**
+```bash
+websocat ws://<address>:4444/ws/metrics
+```
