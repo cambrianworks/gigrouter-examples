@@ -59,6 +59,11 @@ pipelines:
 ```
 * restart your collector
 
+```bash
+kubectl apply -f /etc/gigrouter/k3s/manifests/otel-collector.yaml
+kubectl rollout restart deployment otel-collector
+```
+
 Now Run your python receiver
 ```
 python otlpReceiverServer.py
