@@ -52,7 +52,7 @@ Note: For the default GigRouter install, this file is at: `/etc/gigrouter/k3s/ma
 ```bash
 exporters:
     otlphttp:
-    endpoint: http://<your address here>:4444    
+      endpoint: http://<your address here>:4444
 ```
 * then in the same otel-collector.yaml be sure to add your new exporter to the metrics pipeline exports:
 ```bash
