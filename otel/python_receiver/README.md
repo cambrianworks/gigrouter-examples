@@ -77,7 +77,7 @@ python otlpReceiverServer.py
 
 - **Connect external websocket client (from another terminal session)**
 ```bash
-websocat ws://<address>:4444/ws/metrics
+websocat ws://localhost:4444/ws/metrics # or specify IP address if from other machine
 ```
 
 Since `websocat` is only for testing, it's not listed in the prerequisites but you can install (if needed) from a bash shell with:
