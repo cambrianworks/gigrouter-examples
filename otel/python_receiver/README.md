@@ -58,7 +58,7 @@ exporters:
 ```bash
 pipelines:
     metrics:
-    receivers: [otlp, hostmetrics]
+      receivers: [otlp, hostmetrics]
     exporters: [..., otlphttp]
 ```
 * restart your collector
