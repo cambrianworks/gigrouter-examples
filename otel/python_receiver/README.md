@@ -75,7 +75,7 @@ Now Run your python receiver
 python otlpReceiverServer.py
 ```
 
-- **Connect external websocket client**
+- **Connect external websocket client (from another terminal session)**
 ```bash
 websocat ws://<address>:4444/ws/metrics
 ```
