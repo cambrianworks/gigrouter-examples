@@ -3,6 +3,8 @@
 
 A simple Python service that relays OpenTelemetry (OTLP) metrics from HTTP/Protobuf into WebSocket text frames (JSON).
 
+This example serves both to understand how to read from OpenTelemetry as well as how to convert the protobuf format to JSON. The example is also serves as a baseline that users can customize to their needs.
+
 It:
 
 - **Receives** OTLP metrics over HTTP/Protobuf at **`POST /v1/metrics`**  
