@@ -50,7 +50,7 @@ First you must configure your OTEL-collector to export to this port
 
 Note: For the default GigRouter install, this file is at: `/etc/gigrouter/k3s/manifests/otel-collector.yaml`
 
-* first add a new Exporter to your otel-collector.yaml:
+* first add a new Exporter to your otel-collector.yaml (indentation is important and must align with other exporters in section):
 ```bash
 exporters:
     otlphttp:
