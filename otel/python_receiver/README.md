@@ -46,6 +46,8 @@ Note: it is currently hardcoded to be an OTLP Receiver at port 4444, and will re
 
 First you must configure your OTEL-collector to export to this port
 
+Note: For the default GigRouter install, this file is at: `/etc/gigrouter/k3s/manifests/otel-collector.yaml`
+
 * first add a new Exporter to your otel-collector.yaml:
 ```bash
 exporters:
