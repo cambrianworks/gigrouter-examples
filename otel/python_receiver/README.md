@@ -68,3 +68,9 @@ python otlpReceiverServer.py
 ```bash
 websocat ws://<address>:4444/ws/metrics
 ```
+
+Since `websocat` is only for testing, it's not listed in the prerequisites but you can install (if needed) from a bash shell with:
+
+```bash
+(VERSION=1.14.0 ARCH=$(uname -m) URL="https://github.com/vi/websocat/releases/download/v${VERSION}/websocat_max.${ARCH}-unknown-linux-musl"; wget -qO websocat "$URL" && chmod +x websocat && sudo mv websocat /usr/local/bin/ && echo "Installed websocat" || echo "Failed to install websocat")
+```
