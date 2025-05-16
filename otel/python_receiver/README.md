@@ -59,7 +59,7 @@ exporters:
 pipelines:
     metrics:
       receivers: [otlp, hostmetrics]
-    exporters: [..., otlphttp]
+      exporters: [APPEND_TO_EXISTING_LIST, otlphttp]
 ```
 * restart your collector
 
