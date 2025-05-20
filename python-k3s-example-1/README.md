@@ -12,7 +12,7 @@ The application also serves the purposes of deploying an application to k3s, che
 
 ## K3s Background
 
-For information on why we encourage use of k3s on the GigRouter for containerization and orchestration, see some of the READMEs in the parent directory including [K3S-BACKGROUND.md](../K3S-BACKGROUND.md).
+For information on why we encourage use of k3s on the GigRouter for containerization and orchestration, see [Container Orchestration](https://docs.gigrouter.space/book/v2.2.0/users_guide/software/container_orchestration.html) of the GigRouter User Docs as well as some of the READMEs in the parent directory including [README-K3S-OVERVIEW.md](../README-K3S-OVERVIEW.md).
 
 ## Example 1 - All in One
 
@@ -24,6 +24,7 @@ For this example, there are 3 k3s building blocks spread across 2 files:
 
 #### [app-config.yaml](./app-config.yaml)
 
+<!-- inline: app-config.yaml -->
 ```
 apiVersion: v1
 kind: ConfigMap
@@ -53,7 +54,9 @@ data:
         app.run(host="0.0.0.0", port=8080)
   requirements.txt: |
     flask
+
 ```
+<!-- endinline -->
 
 This specifies a `ConfigMap`. Often, this could set environment variables or populate a local configuration but here we will specify entire files: a Python program as `app.py` and dependent libraries as `requirements.txt`.
 
@@ -67,6 +70,7 @@ The top part of the yaml file is boilerplate for specifying a k3s resource where
 
 #### [deployment.yaml](./deployment.yaml)
 
+<!-- inline: deployment.yaml -->
 ```
 apiVersion: apps/v1
 kind: Deployment
@@ -112,7 +116,9 @@ spec:
     port: 8080
     targetPort: 8080
   type: LoadBalancer
+
 ```
+<!-- endinline -->
 
 Here, we've specified both a `Deployment` and a `Service` where the `---` on a line on its own separates the resources and allows specification of multiple resources in a single file.
 
