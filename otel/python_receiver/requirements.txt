@@ -1,0 +1,5 @@
+fastapi>=0.115.12
+googleapis-common-protos>=1.70.0
+opentelemetry-proto>=1.32.1
+protobuf>=5.29.4
+uvicorn[standard]>=0.33.0
