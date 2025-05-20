@@ -1,24 +1,23 @@
 # gigrouter-examples
 
-The gigrouter-examples repository contains:
+This repository provides a collection of examples and tools for the **GigRouter** platform. The examples span various technologies used with GigRouter, including containerized services, telemetry pipelines, and GPU support.
 
-* Examples of (mostly k3s) user applications
-* [Instructions for installing CUDA 12](./cuda-12)
-* Functional tools
-* System software for the GigRouter
+## Getting Started
 
-The user applications are focused on k3s simple examples in Python, larger examples ideally in line with common needs, and other useful tools such as adding support for Nvidia CUDA 12.
+To use these examples on a GigRouter device with the default Linux configuration:
 
-The examples also include **exercises** to customize the examples, demonstrate features of k3s, illustrate configuration of k3s and work to provide foresight to avoid potential gotchas or surprise resource exhaustion.
+```bash
+ssh gigrouter@GIGROUTER_HOSTNAME
+git clone https://github.com/cambrianworks/gigrouter-examples.git
+```
 
-The suggested workflow is to:
-* Read the k3s overview
-* Follow the Python k3s [example 1](./python-k3s-example-1/README.md) which builds an http server that supports simple addition
-  * This example includes an exercise to add a `multiply` function
+## Examples
 
-As needed:
-* Read Open Telemetry metrics in Python and convert to JSON: [Python OTLP Receiver](./otel/python_receiver/README.md)
-* CUDA 12 support: [Instructions for installing CUDA 12](./cuda-12/README.md)
+This repository includes:
+
+- [Example k3s applications](./K3S-EXAMPLES.md): Python-based examples demonstrating HTTP services, persistent volumes, inter-service communication, and Docker-to-k3s image workflows.
+- [Python OTLP Receiver](./otel/python_receiver/README.md): A FastAPI-based server that receives OpenTelemetry metrics, converts them to JSON and streams the output to a websocket.
+- [CUDA 12 Support](./cuda-12/README.md): Instructions for installing and enabling CUDA 12 support on supported GigRouter devices.
 
 ## License
 

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: file-upload-pv
+  namespace: default
+spec:
+  claimRef:
+    namespace: default
+    name: file-upload-pvc
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  hostPath:
+    path: /usr/local/gigrouter/k3s/pv/file-server
+    type: DirectoryOrCreate
+  persistentVolumeReclaimPolicy: Retain
