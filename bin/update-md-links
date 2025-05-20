@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+"""
+update-md-links: Inline referenced file contents into Markdown between markers
+"""
+import os
+import argparse
+import re
+
+# Configuration settings
+file_marker_pre = "```\n"  # Opening code fence
+file_marker_post = "```\n"  # Closing code fence
+smart_newline_after_inline = True  # Ensure trailing newline after inlined file content
+
+# Regex pattern to detect inline blocks:
+#   1. Captures the inline marker and file path as group 1
+#   2. Named group 'path' for the file path (group 2)
+#   3. Non-greedily consumes content up to the endinline marker
+#   4. Captures the endinline marker as group 3
+inline_pattern = re.compile(
+    r"(?x)"  # Verbose mode
+    # Group 1: inline marker and path
+    r"(<!--\s*inline:\s*(?P<path>[^\r\n]+?)\s*-->)"
+    # Consume anything up to endinline
+    r"[\s\S]*?"
+    # Group 3: endinline marker
+    r"(<!--\s*endinline\s*-->)"
+)
+
+
+def update_file(md_path):
+    """Read, replace inline blocks, and write back if changes occurred."""
+    try:
+        text = open(md_path, encoding='utf-8').read()
+    except Exception as e:
+        print(f"Skipping {md_path}: {e}")
+        return
+
+    changed = False
+
+    def replace(match):
+        nonlocal changed
+        inline_comment = match.group(1)
+        path = match.group('path').strip()
+        end_marker = match.group(3)  # Correct group for endinline
+
+        if not os.path.isfile(path):
+            print(f"Warning: file not found: {path}")
+            return match.group(0)
+
+        # Read and prepare new content
+        new_content = open(path, encoding='utf-8').read()
+        if smart_newline_after_inline and not new_content.endswith("\n"):
+            new_content += "\n"
+
+        # Build replacement block
+        replacement = (
+            f"{inline_comment}\n"
+            f"{file_marker_pre}{new_content}{file_marker_post}"
+            f"{end_marker}"
+        )
+        changed = True
+        return replacement
+
+    new_text = inline_pattern.sub(replace, text)
+    if changed:
+        with open(md_path, 'w', encoding='utf-8') as out:
+            out.write(new_text)
+        print(f"Updated: {md_path}")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Update Markdown files by inlining contents of referenced files",
+        prog="update-md-links"
+    )
+    parser.add_argument(
+        'files', nargs='*',
+        help='Markdown files to process (default: all .md under current directory)'
+    )
+    args = parser.parse_args()
+
+    # Collect markdown files
+    if args.files:
+        md_files = args.files
+    else:
+        md_files = []
+        for root, _, files in os.walk('.'):
+            for fn in files:
+                if fn.lower().endswith('.md'):
+                    md_files.append(os.path.join(root, fn))
+
+    for md in md_files:
+        update_file(md)
+
+if __name__ == '__main__':
+    main()
