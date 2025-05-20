@@ -10,6 +10,7 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 # Verify we're on Ubuntu 20.04
+# shellcheck disable=SC1091
 if [[ -r /etc/os-release ]]; then
   # load NAME, VERSION_ID, PRETTY_NAME, etc.
   . /etc/os-release
