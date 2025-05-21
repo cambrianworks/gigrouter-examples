@@ -1,6 +1,6 @@
 # K3s Tips
 
-Below are some quick tips for getting started with k3s. This assumes you already understand the basics of what k3s is and have scanned the [K3S-Background.md](./K3-BACKGROUND.md) file but want some quick hands-on tips.
+Below are some quick tips for getting started with k3s. This assumes you already understand the basics of what k3s is and have scanned the [README-K3S-OVERVIEW.md](./README-K3S-OVERVIEW.md) file but want some quick hands-on tips.
 
 This is intended to be the guide that gives you some of the background you wished you knew before ever getting started with k3s.
 
@@ -20,9 +20,9 @@ cluster: A k3s cluster could include several nodes and then this complicates how
 
 K3s includes support for numerous resource types and various ways of referring to the names. It can be confusing if you see `kubectl get services` versus `kubectl get service` versus `kubectl get svc` and why our yaml specification for a service uses `kind: Service`.
 
-Note that [Example 1](./python-k3s-example-1/README.md) has a suggested [exercise](./python-k3s-example-1/EXERCISE-K3S-RESOURCES.md) that includes very similar information exploring configmaps.
+Note that [Example 1](./python-k3s-example-1/README.md) has a suggested [exercise](./python-k3s-example-1/EXERCISE-K3S-RESOURCES.md) that includes very similar information exploring the `configmaps` resource.
 
-Let's dig into this one for services!
+Let's dig into this one for `services`!
 
 ```
 $ kubectl api-resources -o wide | grep -iE "^services|shortnames"
@@ -166,7 +166,7 @@ As the `nodes` are really the top-level resources that host all the other resour
 Here we don't see a namespace column:
 
 ```
-w$ kubectl get nodes
+$ kubectl get nodes
 NAME                STATUS   ROLES                  AGE   VERSION
 k3s-1423522021480   Ready    control-plane,master   65d   v1.30.6+k3s1
 ```
@@ -259,7 +259,7 @@ $ kubectl get pod mount-test-6cc99f7b47-v27fc -o jsonpath="{.spec.terminationGra
 30
 ```
 
-We can see that the pod has a grace period of 30 seconds to quit when requested before it is forcefully stopped.
+We can see that the pod has a grace period of 30 seconds when requested to stop before it is forcefully stopped.
 
 Here's another example where we can query the IP address in use by Example 1:
 
@@ -330,7 +330,7 @@ The Pod "mount-test-6cc99f7b47-v27fc" is invalid: spec: Forbidden: pod updates m
   }
 ```
 
-Our patch failed but the syntax shows how a patch could work and output troubleshooting is useful.
+Our patch failed but the syntax shows how a patch could work and the above output is useful for troubleshooting.
 
 Here, the command was run in `bash` and we can see that the failed patch gave a non-zero exit status (by checking the special `$?` last exit status variable):
 
@@ -350,7 +350,7 @@ Above, the editor was closed without making changes.
 
 From this section, you should have a general understanding of how to create, delete and modify k3s resources.
 
-**NOTE:** These changes are not guaranteed to persist across a reboot be immune by changes from other k3s tools. Some resources are fixed in k3s and will be reset to their defaults upon a reboot. For example, if you modified some properties of the k3s "local path provisioner" service and rebooted the computer, the defaults would be re-applied at startup. You'd need to review other documentation for a persistent configuration change to a k3s service. For GigRouter services, the directory `/etc/gigrouter/k3s` contains some configuration properties that are generally not intended to be changed manually and will be reapplied to their default state upon reboot. 
+**NOTE:** These changes are not guaranteed to persist across a reboot or be immune to changes from other k3s tools. Some resources are fixed in k3s and will be reset to their defaults upon a reboot. For example, if you modified some properties of the k3s "local path provisioner" service and rebooted the computer, the defaults would be re-applied at startup. You'd need to review other documentation for a persistent configuration change to a k3s service. For GigRouter services, the directory `/etc/gigrouter/k3s` contains some configuration properties that are generally not intended to be changed manually and will be reapplied to their default state upon reboot.
 
 ## Service Types
 
@@ -369,6 +369,8 @@ Each is appropriate in different circumstances. There are releated resources suc
 If we use `NodePort` then we can't listen at some common ports such as `8080` but must choose a port in range `30000-32767`. This is generally appropriate for local testing or a quick proof-of-concept.
 
 `ClusterIP` is the default service type (if type is not specified) then we can communicate within the cluster but not from a machine outside the cluster without additional ingress configuration.
+
+[Example 2](./python-k3s-example-2/README.md) gives a basic setup that uses an ingress which lets you attach your http service to the k3s cluster and available at both standard http:// and https:// ports and some unique URL prefix to direct to your service.
 
 ## Service Types Additional Drilldown
 
@@ -417,7 +419,7 @@ Below are some other options here for accessing the service or exposing ports:
 
 With above, you can connect to many variations including `localhost:30080`, `local_ip_address:30080`, or `cluster_ip_address:8080`, or port forward to node and connect to `8080`.
 
-3. Another option is to use the default `type: ClusterIP` which is generally reserved for intra-cluster communication or in combination with ingress configuration in the case of http endpoints.
+3. Another option is to use the default `type: ClusterIP` which is generally reserved for intra-cluster communication or in combination with ingress configuration in the case of http endpoints. Use of ClusterIP and ingress setup is covered in [Example 2](./python-k3s-example-2/README.md).
 
 ## K3s Built-in Services
 
@@ -456,4 +458,4 @@ This is an aggregator of resource usage.
 
 #### `traefik`
 
-The `traefik` service allows managing an ingress for http endpoints running within your k3s environment. You'll find that your k3s will by default listen on port 80 for http and at 443 for https though, without additional configuration, will run with a self-signed certificate and trigger some warnings.
+Detailed more in example 2, `traefik` allows managing an ingress for http endpoints running within your k3s environment. You'll find that your k3s will by default listen on port 80 for http and at 443 for https though, without additional configuration, will run with a self-signed certificate and trigger some warnings.

@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Check for k3s; return non-zero if issue
+
+set -euo pipefail
+
+# Function to print a header
+header() {
+  echo
+  echo "======================================"
+  echo "$1"
+  echo "======================================"
+}
+
+success_count=0
+
+# Check k3s service
+header "Checking k3s"
+if systemctl is-active --quiet k3s; then
+  echo "✅ k3s is already running."
+  success_count=$((success_count + 1))
+else
+  echo "⚠️  k3s is NOT running."
+fi
+
+if [ $success_count = 1 ]; then
+  exit 0
+else
+  exit 1
+fi

@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: multi-service-ingress
+  namespace: default  # ensure this matches your namespace
+  annotations:
+    # Note: Some instructions use "default/" instead of "default-" but that fails to
+    # work and logs errors in traefik.
+    traefik.ingress.kubernetes.io/router.middlewares: default-strip-file-prefix@kubernetescrd
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /md5
+        pathType: Prefix
+        backend:
+          service:
+            name: md5sum-service
+            port:
+              number: 80
+      - path: /file
+        pathType: Prefix
+        backend:
+          service:
+            name: file-service
+            port:
+              number: 80
+

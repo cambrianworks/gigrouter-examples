@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: md5sum-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: md5sum-service
+  template:
+    metadata:
+      labels:
+        app: md5sum-service
+    spec:
+      containers:
+      - name: md5sum-service
+        image: md5sum_service:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5001

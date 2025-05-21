@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+# Check for docker; return non-zero if issue
+
+set -euo pipefail
+
+# Function to print a header
+header() {
+  echo
+  echo "======================================"
+  echo "$1"
+  echo "======================================"
+}
+
+success_count=0
+docker_success=0
+
+# Check Docker installation
+header "Checking Docker"
+if command -v docker >/dev/null 2>&1; then
+  echo "✅ Docker is installed: $(docker --version)"
+  docker_success=1
+else
+  echo "⚠️  Docker is NOT installed."
+  read -r -p "Install Docker now? [Y/n] " ans
+  ans=${ans:-Y}
+  if [[ $ans =~ ^[Yy]$ ]]; then
+    echo "→ Updating package index..."
+    sudo apt update
+    echo "→ Installing Docker..."
+    sudo apt install -y docker.io
+    echo "→ Enabling and starting Docker..."
+    sudo systemctl enable --now docker
+    if systemctl is-active --quiet docker; then
+      echo "✅ Docker installed and running: $(docker --version)"
+      docker_success=1
+    else
+      echo "❌ Docker installed but failed to start. Check 'journalctl -u docker' for logs."
+      exit 1
+    fi
+  else
+    echo "Skipping Docker installation."
+  fi
+fi
+success_count=$((success_count + docker_success))
+
+# 3. Verify Docker can be run by this user
+if [ $docker_success = 1 ]; then
+  header "Verifying user access to Docker"
+  if docker ps >/dev/null 2>&1; then
+    echo "✅ You can run 'docker' commands as user $(whoami)."
+    success_count=$((success_count + 1))
+  else
+    echo "⚠️  Cannot run Docker commands as $(whoami)."
+    # Check for docker group
+    if getent group docker >/dev/null; then
+      echo "→ 'docker' group exists."
+      read -r -p "Add user '$(whoami)' to 'docker' group? [Y/n] " ans
+      ans=${ans:-Y}
+      if [[ $ans =~ ^[Yy]$ ]]; then
+        sudo usermod -aG docker "${USER}"
+        echo "✅ Added $(whoami) to docker group."
+        echo "ℹ️  You will need to log out and back in (or run 'newgrp docker') for this to take effect."
+      else
+        echo "Skipping adding user to docker group."
+      fi
+    else
+      echo "❌ 'docker' group not found. Docker installation may be non-standard."
+      echo "If you installed Docker from a custom repo, ensure the docker group exists or consult your installation docs."
+    fi
+  fi
+fi
+
+echo ""
+if [ "$success_count" = 2 ]; then
+    exit 0
+else
+    exit 1
+fi

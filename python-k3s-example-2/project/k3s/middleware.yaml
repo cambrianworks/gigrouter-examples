@@ -1,0 +1,12 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-file-prefix
+  namespace: default   # ensure the namespace is correct
+spec:
+  stripPrefix:
+    # ingress watches for /file/upload, /file/files, and /file/download AND
+    # uses leading /file to direct anything with that to file-service BUT
+    # should strip leading "/file" when passing on to underlying service
+    prefixes:
+      - /file
